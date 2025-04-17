@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels: 
+    app: demo
+    tier: database 
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: demo
+        tier: database
+    spec:
+      nodeSelector:
+        tier: database
+      containers:
+      - name: postgres
+        image: postgres
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_USER
+          value: vibav
+        - name: POSTGRES_PASSWORD
+          value: vibav
+        - name: POSTGRES_DB
+          value: db
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: demo
+    tier: database
+spec:
+  selector:
+    app: demo
+    tier: database
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+  

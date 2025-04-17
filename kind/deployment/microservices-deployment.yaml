@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: demo
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: demo
+        tier: backend
+    spec:
+      nodeSelector:
+        tier: backend
+      containers:
+      - name: backend
+        image: microservices
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_USER
+          value: "vibav"
+        - name: POSTGRES_PASSWORD
+          value: "vibav"
+        - name: POSTGRES_HOST
+          value: "postgres"
+        - name: POSTGRES_INTERNAL_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          value: "db"
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: demo
+    tier: backend
+spec:
+  selector:
+    app: demo
+    tier: backend
+  ports:
+  - protocol: TCP
+    name: http
+    port: 80
+    targetPort: 8080
+
+
+

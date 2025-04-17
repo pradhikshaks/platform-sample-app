@@ -1,0 +1,27 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: deploy-blue-cluster
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80 # because ingress service port i saw it was 80
+    hostPort: 8001
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 444
+    protocol: TCP
+- role: worker
+  labels:
+    tier: frontend
+- role: worker
+  labels:
+    tier: backend
+- role: worker
+  labels:
+    tier: database
