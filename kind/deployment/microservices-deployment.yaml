@@ -21,8 +21,7 @@ spec:
         tier: backend
       containers:
       - name: backend
-        image: microservices
-        imagePullPolicy: IfNotPresent
+        image: madhanprasath14/microservices
         env:
         - name: POSTGRES_USER
           value: "vibav"

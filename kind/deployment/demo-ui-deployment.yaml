@@ -21,8 +21,7 @@ spec:
         tier: frontend
       containers:
       - name: frontend
-        image: demo-ui
-        imagePullPolicy: IfNotPresent
+        image: madhanprasath14/demi-ui
         ports:
         - containerPort: 8001
         env:

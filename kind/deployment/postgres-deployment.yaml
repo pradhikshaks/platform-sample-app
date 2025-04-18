@@ -22,8 +22,7 @@ spec:
         tier: database
       containers:
       - name: postgres
-        image: postgres
-        imagePullPolicy: IfNotPresent
+        image: madhanprasath14/postgres-init
         env:
         - name: POSTGRES_USER
           value: vibav
